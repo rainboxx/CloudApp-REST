@@ -9,11 +9,11 @@ CloudApp::REST::Item::Text - Text item class of CloudApp::REST
 
 =head1 VERSION
 
-Version 0.0.2
+Version 0.01_03
 
 =cut
 
-our $VERSION = '0.0.2';
+our $VERSION = '0.01_03';
 
 has item_type => (is => 'ro', required => 1, isa => 'Str', default => 'text',);
 has remote_url => (is => 'ro', required => 1, isa => Uri, coerce => 1);
@@ -31,7 +31,7 @@ The attributes listed here are only accessible for text items.
 
 =head2 remote_url
 
-This seems to be the same as the L<CloudApp::REST::Item/content_url>.  Returns an L<URL|Uri> instance.
+This seems to be the same as the L<CloudApp::REST::Item/content_url>.  Returns an L<URL|URI> instance.
 
 Although most of the items has a remote_url, this attribute is item specific.
 

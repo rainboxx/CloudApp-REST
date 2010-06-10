@@ -9,11 +9,11 @@ CloudApp::REST::Item::Boomark - Boomark item class of CloudApp::REST
 
 =head1 VERSION
 
-Version 0.0.2
+Version 0.01_03
 
 =cut
 
-our $VERSION = '0.0.2';
+our $VERSION = '0.01_03';
 
 has item_type => (is => 'ro', required => 1, isa => 'Str', default => 'boomark',);
 has redirect_url => (is => 'ro', required => 0, isa => Uri, coerce => 1);
@@ -31,7 +31,7 @@ The attributes listed here are only accessible for bookmark items.
 
 =head2 redirect_url
 
-The L<URL|Uri> this bookmark links to.
+The L<URL|URI> this bookmark links to.
 
 =head1 SEE ALSO
 

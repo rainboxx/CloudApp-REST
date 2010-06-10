@@ -1,9 +1,8 @@
 Revision history for CloudApp-REST
 
-0.0.2   09-01-2010/04:35pm
+0.01_03 09-01-2010/11:00pm
         Fixed docs for proper interlinks on CPAN
-        Added missing dependencies
-        Changed version number format
+        Added missing dependencies and new meta info
         Uploaded to github: http://github.com/rainboxx/CloudApp-REST
 
 0.01    06-01-2010/10:50pm

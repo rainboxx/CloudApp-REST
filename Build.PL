@@ -20,8 +20,13 @@ my $builder = Module::Build->new(
         'Carp' => 0,
         'Readonly' => 0,
     },
-    add_to_cleanup      => [ 'CloudApp-REST-*' ],
+    add_to_cleanup => [ 'CloudApp-REST-*' ],
     create_makefile_pl => 'traditional',
+    meta_merge => {
+        resources => {
+            repository  => 'http://github.com/rainboxx/CloudApp-REST/'
+        }
+    },
 );
 
 $builder->create_build_script();

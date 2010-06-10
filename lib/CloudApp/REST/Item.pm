@@ -11,11 +11,11 @@ CloudApp::REST::Item - Base class for all items
 
 =head1 VERSION
 
-Version 0.0.2
+Version 0.01_03
 
 =cut
 
-our $VERSION = '0.0.2';
+our $VERSION = '0.01_03';
 
 use MooseX::Types::DateTimeX qw(DateTime);
 use MooseX::Types::URI qw(Uri);
@@ -94,19 +94,19 @@ sub slug {
 
 =head2 content_url
 
-This is the L<URL|Uri> of the content, eg. the file itself.
+This is the L<URL|URI> of the content, eg. the file itself.
 
 =head2 icon
 
-The L<URL|Uri> to the item icon at CloudApp.
+The L<URL|URI> to the item icon at CloudApp.
 
 =head2 href
 
-The private L<URL|Uri> to the item at CloudApp.
+The private L<URL|URI> to the item at CloudApp.
 
 =head2 url
 
-The public short L<URL|Uri> to the item at CloudApp.
+The public short L<URL|URI> to the item at CloudApp.
 
 =head2 created_at
 
