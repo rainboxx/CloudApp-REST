@@ -6,7 +6,7 @@ use MooseX::Types::URI qw(Uri);
 use LWP::UserAgent;
 use HTTP::Request;
 use JSON::XS;
-use UNIVERSAL::require;
+use Module::Load;
 use Data::Dumper;
 
 =head1 NAME
@@ -15,11 +15,11 @@ CloudApp::REST - Perl Interface to the CloudApp REST API
 
 =head1 VERSION
 
-Version 0.01_03
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01_03';
+our $VERSION = '0.02';
 
 has useragent => (
     is       => 'ro',
@@ -46,7 +46,8 @@ has fileupload_url   => (is => 'rw', required => 0, isa => Uri, coerce => 1, def
 has auth_netloc => (is => 'rw', required => 0, isa => 'Str', default => 'my.cl.ly:80');
 has auth_realm  => (is => 'rw', required => 0, isa => 'Str', default => 'Application');
 
-has username => (is => 'rw', required => 0, isa => 'Str');
+has email => (is => 'rw', required => 0, isa => 'Str');
+has username => (is => 'rw', required => 0, isa => 'Str', trigger => sub { shift->email(shift) });
 has password => (is => 'rw', required => 0, isa => 'Str');
 
 has proxy => (is => 'rw', required => 0, isa => Uri, coerce => 1);
@@ -62,7 +63,7 @@ Here's an example on how to retrieve the last 5 items:
   
   my $cl = CloudApp::REST->new;
   
-  $cl->username('email@example.com');
+  $cl->email('email@example.com');
   $cl->password('my_supersafe_secret');
   
   my $items = $cl->get_items;
@@ -73,18 +74,20 @@ Here's an example on how to retrieve the last 5 items:
 
 Creates and returns a new instance.
 
-=head2 username
+=head2 email
+
+B<Note:> C<username> is now an alias for the C<email> method, provided for legacy!
 
 Parameters:
 
 =over
 
-=item C<$username>
+=item C<$email>
 
 =back
 
-Sets the username for requests that need authentication.  Unless you only use L</get_item>
-a username is required.
+Sets the email address for requests that need authentication.  Unless you only use L</get_item>
+an email address is required.
 
 =head2 password
 
@@ -136,7 +139,6 @@ sub get_item {
 
     my $uri = $params->{uri} || ($params->{slug} ? $self->public_base_url . $params->{slug} : die "No 'uri' or 'slug' given");
 
-    $self->authenticate;
     my $item_attrs = $self->_get_response({ uri => $uri });
 
     return $self->_build_item($item_attrs);
@@ -365,23 +367,22 @@ Parameters:
 
 =back
 
-Instead of using L</username> and L</password> directly you can
+Instead of using L</email> and L</password> directly you can
 pass along both parameters to L</authenticate> to set the user data.
 
 If one of the following parameters are not given, L</authenticate> tries to find them in
-L</username> or L</password>.  If either parameter cannot be found,
+L</email> or L</password>.  If either parameter cannot be found,
 L</authenticate> dies.
 
 =over 4
 
-=item I<username =E<gt> $username>
+=item I<email =E<gt> $email>
+=item I<username =E<gt> $email> (B<Legacy>)
+=item I<user =E<gt> $email> (B<Legacy>)
 
-=item I<user =E<gt> $username>
-
-Username to authenticate with.  Use one of them to access L</username>.
+Email to authenticate with.  Use one of them to access L</email>.
 
 =item I<password =E<gt> $password>
-
 =item I<pass =E<gt> $password>
 
 Password to authenticate with.  Use one of them to access L</password>.
@@ -399,12 +400,49 @@ sub authenticate {
     my $self   = shift;
     my $params = shift;
 
-    my $user = $params->{username} || $params->{user} || $self->username || die "You have to provide a username";
-    my $pass = $params->{password} || $params->{pass} || $self->password || die "You have to provide a password";
+    my $email = $params->{email} || $params->{username} || $params->{user} || $self->email || die "You have to provide an email address";
+    my $pass  = $params->{password} || $params->{pass} || $self->password || die "You have to provide a password";
 
-    $self->useragent->credentials($self->auth_netloc, $self->auth_realm, $user, $pass);
+    $self->useragent->credentials($self->auth_netloc, $self->auth_realm, $email, $pass);
 
     return 1;
+}
+
+=head2 account_register
+
+Parameters:
+
+=over
+
+=item C<\%params>
+
+=back
+
+Registers an CloudApp account using the given email and password and returns the data returned by the API call as hash ref.
+
+=over 4
+
+=item I<email =E<gt> $email>
+
+Email address (username) to register.
+
+=item I<password =E<gt> $password>
+=item I<pass =E<gt> $password>
+
+Password for the user.
+
+=back
+
+=cut
+
+sub account_register {
+    my $self   = shift;
+    my $params = shift;
+
+    my $email = $params->{email} || $self->email || die "You have to provide an email address";
+    my $pass  = $params->{password} || $params->{pass} || $self->password || die "You have to provide a password";
+
+    return $self->_get_response({ uri => $self->private_base_url . 'register', params => { user => { email => $email, password => $pass } } });
 }
 
 =head1 FLAGS, ATTRIBUTES AND SETTINGS
@@ -535,7 +573,7 @@ sub _build_item {
     }
 
     my $module = __PACKAGE__ . '::Item::' . ucfirst($type);
-    $module->use or die $@;
+    load $module;
 
     my $item_instance = $module->new($item_attrs);
 

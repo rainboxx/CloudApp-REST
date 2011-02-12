@@ -9,13 +9,7 @@ use Readonly;
 
 CloudApp::REST::Item - Base class for all items
 
-=head1 VERSION
-
-Version 0.01_03
-
 =cut
-
-our $VERSION = '0.01_03';
 
 use MooseX::Types::DateTimeX qw(DateTime);
 use MooseX::Types::URI qw(Uri);
@@ -29,7 +23,7 @@ has id           => (is => 'ro', required => 1, isa     => 'Int',);
 has owner_id     => (is => 'ro', required => 1, isa     => 'Int',);
 
 has item_type    => (is => 'ro', required => 1, isa => 'Str',);
-has name         => (is => 'ro', required => 1, isa => 'Str',);
+has name         => (is => 'ro', required => 0, isa => 'Str',);
 has private_slug => (is => 'ro', required => 0, isa => 'Str',);
 has public_slug  => (is => 'ro', required => 0, isa => 'Str',);
 
