@@ -781,7 +781,7 @@ L<http://www.rainboxx.de>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2010 Matthias Dietrich.
+Copyright 2011 Matthias Dietrich.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published

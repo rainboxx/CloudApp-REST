@@ -21,11 +21,14 @@ my $builder = Module::Build->new(
         'Readonly' => 0,,
         'Module::Load' => 0,
     },
+    configure_requires => { 'Module::Build' => 0.36 },
     add_to_cleanup => [ 'CloudApp-REST-*' ],
     create_makefile_pl => 'traditional',
     meta_merge => {
         resources => {
-            repository  => 'http://github.com/rainboxx/CloudApp-REST/'
+            repository => 'git://github.com/rainboxx/CloudApp-REST.git',
+            homepage   => 'http://github.com/rainboxx/CloudApp-REST/',
+            bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=CloudApp-REST',
         }
     },
 );

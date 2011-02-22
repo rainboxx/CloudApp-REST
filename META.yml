@@ -17,7 +17,7 @@ build_requires:
   Test::More: 0
 configure_requires:
   Module::Build: 0.36
-generated_by: 'Module::Build version 0.3607'
+generated_by: 'Module::Build version 0.3624'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -46,6 +46,8 @@ provides:
   CloudApp::REST::Item::Video:
     file: lib/CloudApp/REST/Item/Video.pm
 resources:
+  bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=CloudApp-REST
+  homepage: http://github.com/rainboxx/CloudApp-REST/
   license: http://dev.perl.org/licenses/
-  repository: http://github.com/rainboxx/CloudApp-REST/
+  repository: git://github.com/rainboxx/CloudApp-REST.git
 version: 0.02
